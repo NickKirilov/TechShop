@@ -1,10 +1,12 @@
+import os
+
 from django.db import models
 from io import BytesIO
 from PIL import Image
 from django.core.files import File
 
 
-URL = 'http://localhost:8000/'
+URL = os.getenv('URL')
 
 
 class Category(models.Model):
