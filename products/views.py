@@ -1,11 +1,28 @@
-from rest_framework.views import APIView
+from django.http import Http404
+from rest_framework import views as rest_views
 from rest_framework.response import Response
 from .models import Product
 from .serializers import ProductSerializer
 
 
-class LatestProductList(APIView):
-    def get(self, request, format=None):
+class LatestProductList(rest_views.APIView):
+    @staticmethod
+    def get(request, *args, **kwargs):
         products = Product.objects.all()[0:4]
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+
+
+class ProductDetail(rest_views.APIView):
+    @staticmethod
+    def get_object(category_slug, product_slug):
+        try:
+            return Product.objects.filter(category__slug=category_slug).get(slug=product_slug)
+        except Product.DoesNotExist:
+            raise Http404
+
+    def get(self, request, category_slug, product_slug, *args, **kwargs):
+        product = self.get_object(category_slug, product_slug)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+

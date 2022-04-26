@@ -37,9 +37,7 @@ INSTALLED_APPS = [
     'djoser'
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8080"
-]
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(' ')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
